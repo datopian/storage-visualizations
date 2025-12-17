@@ -2,107 +2,79 @@
 toc: false
 ---
 
-<div class="hero">
-  <h1>🌀 PortalJS <span style="color: var(--theme-foreground)">Data App</span></h1>
-  <h2>Welcome to your new data app! Edit&nbsp;<code style="font-size: 90%;">src/index.md</code> to change this page.</h2>
-  <a href="https://observablehq.com/framework/getting-started">Get started<span style="display: inline-block; margin-left: 0.25rem;">↗︎</span></a>
+<div class="portaljs-banner">
+  <div class="portaljs-banner-content">
+    <span class="portaljs-banner-icon">🌀</span>
+    <div class="portaljs-banner-text">
+      <p class="portaljs-banner-title">Create beautiful data portals with PortalJS</p>
+      <p class="portaljs-banner-description">The open-source framework for building data catalogs, dashboards, and visualizations.</p>
+    </div>
+  </div>
+  <a href="https://www.portaljs.com/" target="_blank" rel="noopener noreferrer" class="portaljs-banner-cta">
+    Get Started Free <span class="portaljs-banner-cta-arrow">→</span>
+  </a>
 </div>
 
-<div class="grid grid-cols-2" style="grid-auto-rows: 504px;">
-  <div class="card">${
-    resize((width) => Plot.plot({
-      title: "Your awesomeness over time 🚀",
-      subtitle: "Up and to the right!",
-      width,
-      y: {grid: true, label: "Awesomeness"},
-      marks: [
-        Plot.ruleY([0]),
-        Plot.lineY(aapl, {x: "Date", y: "Close", tip: true})
-      ]
-    }))
-  }</div>
-  <div class="card">${
-    resize((width) => Plot.plot({
-      title: "How big are penguins, anyway? 🐧",
-      width,
-      grid: true,
-      x: {label: "Body mass (g)"},
-      y: {label: "Flipper length (mm)"},
-      color: {legend: true},
-      marks: [
-        Plot.linearRegressionY(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species"}),
-        Plot.dot(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species", tip: true})
-      ]
-    }))
-  }</div>
+<div class="hero-large">
+  <h1>Cloud Storage Pricing Portal</h1>
+  <p>Compare storage and egress costs across major cloud providers including AWS S3, Cloudflare R2, Backblaze B2, and more.</p>
+</div>
+
+```js
+const storageData = FileAttachment("data/cloud_storage_pricing.csv").csv({typed: true});
+```
+
+```js
+const providers = (await storageData).map(d => ({
+  provider: d.Provider,
+  storageCost: +d["Storage Price ($/TB)"] || 0,
+  downloadCost: +d["Download Price ($/TB)"] || 0
+})).filter(d => d.provider);
+
+const avgStorage = d3.mean(providers, d => d.storageCost);
+const avgDownload = d3.mean(providers, d => d.downloadCost);
+const freeEgressCount = providers.filter(d => d.downloadCost === 0).length;
+const cheapestStorage = [...providers].sort((a, b) => a.storageCost - b.storageCost)[0];
+```
+
+<div class="key-stats">
+  <div class="key-stat">
+    <div class="value">${providers.length}</div>
+    <div class="label">Providers</div>
+  </div>
+  <div class="key-stat">
+    <div class="value">${freeEgressCount}</div>
+    <div class="label">Free Egress</div>
+  </div>
+  <div class="key-stat">
+    <div class="value">$${avgStorage.toFixed(1)}</div>
+    <div class="label">Avg Storage/TB</div>
+  </div>
+  <div class="key-stat">
+    <div class="value">$${avgDownload.toFixed(1)}</div>
+    <div class="label">Avg Egress/TB</div>
+  </div>
+</div>
+
+<div class="landing-grid">
+  <div class="landing-card">
+    <a href="./cloud-storage">
+      <h3>Cloud Storage Pricing</h3>
+      <p>Compare storage and egress costs across 17+ cloud providers. Find the best value for your use case with interactive visualizations.</p>
+    </a>
+  </div>
+  <div class="landing-card">
+    <h3>Key Highlights</h3>
+    <p>Cloudflare R2 offers free egress. Storj has the cheapest storage at $4/TB. Traditional clouds like AWS and GCP have high egress fees.</p>
+  </div>
 </div>
 
 ---
 
-## Next steps
+## Data Sources
 
-Here are some ideas of things you could try…
+This portal uses pricing data sourced from public provider documentation and community research.
 
-<div class="grid grid-cols-4">
-  <div class="card">
-    Chart your own data using <a href="https://observablehq.com/framework/lib/plot"><code>Plot</code></a> and <a href="https://observablehq.com/framework/files"><code>FileAttachment</code></a>. Make it responsive using <a href="https://observablehq.com/framework/javascript#resize(render)"><code>resize</code></a>.
-  </div>
-  <div class="card">
-    Create a <a href="https://observablehq.com/framework/project-structure">new page</a> by adding a Markdown file (<code>whatever.md</code>) to the <code>src</code> folder.
-  </div>
-  <div class="card">
-    Add a drop-down menu using <a href="https://observablehq.com/framework/inputs/select"><code>Inputs.select</code></a> and use it to filter the data shown in a chart.
-  </div>
-  <div class="card">
-    Write a <a href="https://observablehq.com/framework/loaders">data loader</a> that queries a local database or API, generating a data snapshot on build.
-  </div>
-  <div class="card">
-    Import a <a href="https://observablehq.com/framework/imports">recommended library</a> from npm, such as <a href="https://observablehq.com/framework/lib/leaflet">Leaflet</a>, <a href="https://observablehq.com/framework/lib/dot">GraphViz</a>, <a href="https://observablehq.com/framework/lib/tex">TeX</a>, or <a href="https://observablehq.com/framework/lib/duckdb">DuckDB</a>.
-  </div>
-  <div class="card">
-    Ask for help, or share your work or ideas, on our <a href="https://github.com/observablehq/framework/discussions">GitHub discussions</a>.
-  </div>
-  <div class="card">
-    Visit <a href="https://github.com/observablehq/framework">Framework on GitHub</a> and give us a star. Or file an issue if you’ve found a bug!
-  </div>
-</div>
-
-<style>
-
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: var(--sans-serif);
-  margin: 4rem 0 8rem;
-  text-wrap: balance;
-  text-align: center;
-}
-
-.hero h1 {
-  margin: 1rem 0;
-  padding: 1rem 0;
-  max-width: none;
-  font-size: 14vw;
-  font-weight: 900;
-  line-height: 1;
-  color: var(--theme-foreground-focus);
-}
-
-.hero h2 {
-  margin: 0;
-  max-width: 34em;
-  font-size: 20px;
-  font-style: initial;
-  font-weight: 500;
-  line-height: 1.5;
-  color: var(--theme-foreground-muted);
-}
-
-@media (min-width: 640px) {
-  .hero h1 {
-    font-size: 56px;
-  }
-}
-
-</style>
+- **Primary Source:** [Cloud Storage Pricing Analysis](https://gist.github.com/Manouchehri/733e6235457e60de24fdbb15046fba7f)
+- **Providers Covered:** AWS S3, Cloudflare R2, Backblaze B2, Google Cloud Storage, Wasabi, Storj, and more
+- **Last Updated:** December 2024
